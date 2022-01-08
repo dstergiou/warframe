@@ -1,0 +1,945 @@
+[
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 1,
+    "fields": {
+      "name": "Akbolto Prime",
+      "url_name": "akbolto_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 2,
+    "fields": {
+      "name": "Akbronco Prime",
+      "url_name": "akbronco_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 3,
+    "fields": {
+      "name": "Akjagara Prime",
+      "url_name": "akjagara_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 4,
+    "fields": {
+      "name": "Aklex Prime",
+      "url_name": "aklex_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 5,
+    "fields": {
+      "name": "Aksomati Prime",
+      "url_name": "aksomati_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 6,
+    "fields": {
+      "name": "Akstiletto Prime",
+      "url_name": "akstiletto_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 7,
+    "fields": {
+      "name": "Akvasto Prime",
+      "url_name": "akvasto_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 8,
+    "fields": {
+      "name": "Ankyros Prime",
+      "url_name": "ankyros_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 9,
+    "fields": { "name": "Ash Prime", "url_name": "ash_prime_set", "ducats": 0 }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 10,
+    "fields": {
+      "name": "Astilla Prime",
+      "url_name": "astilla_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 11,
+    "fields": {
+      "name": "Atlas Prime",
+      "url_name": "atlas_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 12,
+    "fields": {
+      "name": "Banshee Prime",
+      "url_name": "banshee_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 13,
+    "fields": {
+      "name": "Ballistica Prime",
+      "url_name": "ballistica_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 14,
+    "fields": {
+      "name": "Baza Prime",
+      "url_name": "baza_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 15,
+    "fields": { "name": "Bo Prime", "url_name": "bo_prime_set", "ducats": 0 }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 16,
+    "fields": {
+      "name": "Boar Prime",
+      "url_name": "boar_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 17,
+    "fields": {
+      "name": "Boltor Prime",
+      "url_name": "boltor_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 18,
+    "fields": {
+      "name": "Braton Prime",
+      "url_name": "braton_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 19,
+    "fields": {
+      "name": "Bronco Prime",
+      "url_name": "bronco_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 20,
+    "fields": {
+      "name": "Burston Prime",
+      "url_name": "burston_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 21,
+    "fields": {
+      "name": "Carrier Prime",
+      "url_name": "carrier_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 22,
+    "fields": {
+      "name": "Cernos Prime",
+      "url_name": "cernos_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 23,
+    "fields": {
+      "name": "Chroma Prime",
+      "url_name": "chroma_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 24,
+    "fields": {
+      "name": "Corinth Prime",
+      "url_name": "corinth_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 25,
+    "fields": {
+      "name": "Dakra Prime",
+      "url_name": "dakra_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 26,
+    "fields": {
+      "name": "Destreza Prime",
+      "url_name": "destreza_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 27,
+    "fields": {
+      "name": "Dethcube Prime",
+      "url_name": "dethcube_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 28,
+    "fields": {
+      "name": "Dual Kamas Prime",
+      "url_name": "dual_kamas_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 29,
+    "fields": {
+      "name": "Ember Prime",
+      "url_name": "ember_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 30,
+    "fields": {
+      "name": "Equinox Prime",
+      "url_name": "equinox_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 31,
+    "fields": {
+      "name": "Euphona Prime",
+      "url_name": "euphona_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 32,
+    "fields": {
+      "name": "Fang Prime",
+      "url_name": "fang_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 33,
+    "fields": {
+      "name": "Fragor Prime",
+      "url_name": "fragor_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 34,
+    "fields": {
+      "name": "Frost Prime",
+      "url_name": "frost_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 35,
+    "fields": {
+      "name": "Galatine Prime",
+      "url_name": "galatine_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 36,
+    "fields": {
+      "name": "Gara Prime",
+      "url_name": "gara_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 37,
+    "fields": {
+      "name": "Glaive Prime",
+      "url_name": "glaive_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 38,
+    "fields": {
+      "name": "Gram Prime",
+      "url_name": "gram_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 39,
+    "fields": {
+      "name": "Guandao Prime",
+      "url_name": "guandao_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 40,
+    "fields": {
+      "name": "Harrow Prime",
+      "url_name": "harrow_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 41,
+    "fields": {
+      "name": "Helios Prime",
+      "url_name": "helios_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 42,
+    "fields": {
+      "name": "Hikou Prime",
+      "url_name": "hikou_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 43,
+    "fields": {
+      "name": "Hydroid Prime",
+      "url_name": "hydroid_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 44,
+    "fields": {
+      "name": "Inaros Prime",
+      "url_name": "inaros_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 45,
+    "fields": {
+      "name": "Ivara Prime",
+      "url_name": "ivara_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 46,
+    "fields": {
+      "name": "Karyst Prime",
+      "url_name": "karyst_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 47,
+    "fields": {
+      "name": "Kogake Prime",
+      "url_name": "kogake_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 48,
+    "fields": {
+      "name": "Knell Prime",
+      "url_name": "knell_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 49,
+    "fields": {
+      "name": "Kronen Prime",
+      "url_name": "kronen_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 50,
+    "fields": { "name": "Lex Prime", "url_name": "lex_prime_set", "ducats": 0 }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 51,
+    "fields": {
+      "name": "Latron Prime",
+      "url_name": "latron_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 52,
+    "fields": {
+      "name": "Limbo Prime",
+      "url_name": "limbo_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 53,
+    "fields": {
+      "name": "Loki Prime",
+      "url_name": "loki_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 54,
+    "fields": { "name": "Mag Prime", "url_name": "mag_prime_set", "ducats": 0 }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 55,
+    "fields": {
+      "name": "Magnus Prime",
+      "url_name": "magnus_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 56,
+    "fields": {
+      "name": "Mesa Prime",
+      "url_name": "mesa_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 57,
+    "fields": {
+      "name": "Mirage Prime",
+      "url_name": "mirage_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 58,
+    "fields": {
+      "name": "Nami Skyla Prime",
+      "url_name": "nami_skyla_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 59,
+    "fields": {
+      "name": "Nekros Prime",
+      "url_name": "nekros_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 60,
+    "fields": {
+      "name": "Nezha Prime",
+      "url_name": "nezha_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 61,
+    "fields": {
+      "name": "Nidus Prime",
+      "url_name": "nidus_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 62,
+    "fields": {
+      "name": "Nikana Prime",
+      "url_name": "nikana_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 63,
+    "fields": {
+      "name": "Ninkondi Prime",
+      "url_name": "ninkondi_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 64,
+    "fields": {
+      "name": "Nova Prime",
+      "url_name": "nova_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 65,
+    "fields": { "name": "Nyx Prime", "url_name": "nyx_prime_set", "ducats": 0 }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 66,
+    "fields": {
+      "name": "Oberon Prime",
+      "url_name": "oberon_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 67,
+    "fields": {
+      "name": "Octavia Prime",
+      "url_name": "octavia_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 68,
+    "fields": {
+      "name": "Odonata Prime",
+      "url_name": "odonata_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 69,
+    "fields": {
+      "name": "Orthos Prime",
+      "url_name": "orthos_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 70,
+    "fields": {
+      "name": "Pandero Prime",
+      "url_name": "pandero_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 71,
+    "fields": {
+      "name": "Pangolin Prime",
+      "url_name": "pan_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 72,
+    "fields": {
+      "name": "Panthera Prime",
+      "url_name": "panthera_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 73,
+    "fields": {
+      "name": "Paris Prime",
+      "url_name": "paris_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 74,
+    "fields": {
+      "name": "Pyrana Prime",
+      "url_name": "pyrana_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 75,
+    "fields": {
+      "name": "Reaper Prime",
+      "url_name": "reaper_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 76,
+    "fields": {
+      "name": "Redeemer Prime",
+      "url_name": "redeemer_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 77,
+    "fields": {
+      "name": "Rhino Prime",
+      "url_name": "rhino_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 78,
+    "fields": {
+      "name": "Rubico Prime",
+      "url_name": "rubico_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 79,
+    "fields": {
+      "name": "Saryn Prime",
+      "url_name": "saryn_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 80,
+    "fields": {
+      "name": "Scindo Prime",
+      "url_name": "scindo_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 81,
+    "fields": {
+      "name": "Scourge Prime",
+      "url_name": "scourge_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 82,
+    "fields": {
+      "name": "Sicarus Prime",
+      "url_name": "sicarus_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 83,
+    "fields": {
+      "name": "Spira Prime",
+      "url_name": "spira_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 84,
+    "fields": {
+      "name": "Silva And Aegis Prime",
+      "url_name": "silva_and_aegis_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 85,
+    "fields": {
+      "name": "Soma Prime",
+      "url_name": "soma_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 86,
+    "fields": {
+      "name": "Stradavar Prime",
+      "url_name": "stradavar_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 87,
+    "fields": {
+      "name": "Strun Prime",
+      "url_name": "strun_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 88,
+    "fields": {
+      "name": "Sybaris Prime",
+      "url_name": "sybaris_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 89,
+    "fields": {
+      "name": "Tekko Prime",
+      "url_name": "tekko_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 90,
+    "fields": {
+      "name": "Tenora Prime",
+      "url_name": "tenora_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 91,
+    "fields": {
+      "name": "Tiberon Prime",
+      "url_name": "tiberon_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 92,
+    "fields": {
+      "name": "Tigris Prime",
+      "url_name": "tigris_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 93,
+    "fields": {
+      "name": "Tipedo Prime",
+      "url_name": "tipedo_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 94,
+    "fields": {
+      "name": "Titania Prime",
+      "url_name": "titania_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 95,
+    "fields": {
+      "name": "Trinity Prime",
+      "url_name": "trinity_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 96,
+    "fields": {
+      "name": "Valkyr Prime",
+      "url_name": "valkey_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 97,
+    "fields": {
+      "name": "Vasto Prime",
+      "url_name": "vasto_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 98,
+    "fields": {
+      "name": "Vauban Prime",
+      "url_name": "vauban_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 99,
+    "fields": {
+      "name": "Vectis Prime",
+      "url_name": "vectis_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 100,
+    "fields": {
+      "name": "Venka Prime",
+      "url_name": "venka_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 101,
+    "fields": {
+      "name": "Volnus Prime",
+      "url_name": "volnus_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 102,
+    "fields": {
+      "name": "Volt Prime",
+      "url_name": "volt_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 103,
+    "fields": {
+      "name": "Wukong Prime",
+      "url_name": "wukong_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 104,
+    "fields": {
+      "name": "Wyrm Prime",
+      "url_name": "wyrm_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 105,
+    "fields": {
+      "name": "Zakti Prime",
+      "url_name": "zakti_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 106,
+    "fields": {
+      "name": "Zephyr Prime",
+      "url_name": "zephyr_prime_set",
+      "ducats": 0
+    }
+  },
+  {
+    "model": "dashboard.PrimeSet",
+    "pk": 107,
+    "fields": {
+      "name": "Zhuge Prime",
+      "url_name": "zhuge_prime_set",
+      "ducats": 0
+    }
+  }
+]

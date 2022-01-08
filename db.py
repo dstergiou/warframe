@@ -1,7 +1,6 @@
-from typing import TypedDict
 import gspread
-import sqlite3
 from sqlite3  import Error
+from typing import TypedDict
 
 class OwnedItem(TypedDict):
     item_name: str
@@ -10,7 +9,7 @@ class OwnedItem(TypedDict):
 DB_FILE = 'warframe.db'   
 SHEET = 'Warframe'
 WORKSHEET = 'Prime' 
-RANGE = 'A2:R107'
+RANGE = 'A2:R108'
 KEY = 'sheets.json'
 
 def read_data_from_sheet(sheet:str=SHEET, worksheet:str=WORKSHEET, range:str=RANGE) -> list[list[str]]:
@@ -181,115 +180,10 @@ def get_items_to_buy() -> list[str]:
             needed_items.append(item_name)
 
     return needed_items
-
-def create_db_connection(db_file:str=DB_FILE) -> sqlite3.Connection:
-    """
-    Connects to the local database
-
-    Args:
-        db_file (str, optional): [description]. Defaults to DB_FILE.
-
-    Returns:
-        sqlite3.Connection: Connection to the on-disk database
-    """
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-    except Error as e:
-        print(f'SQL Error: {e}')
-
-    return conn
-
-def create_db_table(conn:sqlite3.Connection):
-    sql_create_items_table = """
-        CREATE TABLE IF NOT EXISTS prime (
-            id integer PRIMARY KEY,
-            name text NOT NULL,
-            blueprint_label text NOT NULL,
-            blueprint_quantity integer NOT NULL,
-            blueprint_ducat integer NOT NULL,
-            component1_label text NOT NULL,
-            component1_quantity text NOT NULL,
-            component1_ducat text NOT NULL,
-            component2_label text NOT NULL,
-            component2_quantity text NOT NULL,
-            component2_ducat text NOT NULL,
-            component3_label text NOT NULL,
-            component3_quantity text NOT NULL,
-            component3_ducat text NOT NULL,
-            component4_label text NOT NULL,
-            component4_quantity text NOT NULL,
-            component4_ducat text NOT NULL,
-            completed integer NOT NULL,
-            itemID text
-        );
-    """
-
-    conn = create_db_connection()
-    if conn is not None:
-        try:
-            c = conn.cursor()
-            c.execute(sql_create_items_table)
-        except Error as e:
-            print(f'SQL Error: {e}')
-
-def num(s:str)->int:
-    """
-    Return an int for a string that represents numbers
-
-    Args:
-        s (str): String to transform to int
-
-    Returns:
-        int: Integer
-    """
     
-    if s == 'YES':
-        return 1
-    if s == 'NO':
-        return 0
-    try:
-        return int(s)
-    except ValueError:
-        return s
-    
-def sheet_to_db(conn:sqlite3.Connection) -> None:
-    sql = """
-        INSERT INTO prime(
-            name,
-            blueprint_label, blueprint_quantity, blueprint_ducat,
-            component1_label, component1_quantity, component1_ducat,
-            component2_label, component2_quantity, component2_ducat,
-            component3_label, component3_quantity, component3_ducat,
-            component4_label, component4_quantity, component4_ducat,
-            completed, itemID
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
-    """
-
-    records = read_data_from_sheet()
-
-    for record in records:
-        string_to_int_record = [ num(s) for s in record]
-        record = tuple(string_to_int_record)
-    
-        cur = conn.cursor()
-        cur.execute(sql, record)
-        conn.commit()
-        
-    return cur.lastrowid
-    
-def add_itemID_to_db(conn:sqlite3.Connection):
-    sql = """
-        UPDATE prime
-        SET itemID = ?
-        WHERE name = ?        
-    """
-    
-    cur = conn.cursor()
-    cur.execute(sql, record)
-    conn.commit()
-
-# if __name__ == '__main__':
+if __name__ == '__main__':
+    # print(read_data_from_sheet())
     # db = create_db_connection()
     # create_db_table(db)
     # print(sheet_to_db(db))
+    print(get_items_to_buy())

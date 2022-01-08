@@ -4,11 +4,12 @@ import json
 import os
 from dotenv import load_dotenv
 from requests.exceptions import HTTPError
+from db import get_items_to_sell, get_items_to_buy
 
 URL = 'https://api.warframe.market/v1'
 load_dotenv()
 
-def get_info_from_market(item:str, info:str):  
+def get_info_from_market(item:str):
     
     headers = {
         'accept': 'application/json',
@@ -27,17 +28,15 @@ def get_info_from_market(item:str, info:str):
         
     orders = data['payload']['orders']
     
-    if info == 'id':
-        item_id = data['payload']['orders'][0]['id']
-        return item_id
+    item_id = data['payload']['orders'][0]['id']
 
-    if info == 'price':
-        lowest_price = 10000
-        for order in orders:
-            if order['order_type'] == 'sell' and order['user']['status'] == 'ingame':
-                if int(order['platinum']) < lowest_price:
-                    lowest_price = int(order['platinum'])
-        return lowest_price
+    lowest_price = 10000
+    for order in orders:
+        if order['order_type'] == 'sell' and order['user']['status'] == 'ingame':
+            if int(order['platinum']) < lowest_price:
+                lowest_price = int(order['platinum'])
+    
+    return item_id, lowest_price
              
 def login_to_warframe_market() -> str: 
     
@@ -68,6 +67,18 @@ def login_to_warframe_market() -> str:
         print(f'Error occured: {err}')
         
 def sell_to_market(token:str, id:str, price:int, quantity:int)->str:
+    """
+    Sells an item on warframe.market
+    
+    Args:
+        token (str): JWT Token
+        id (str): Warframe.market ID for the item to be sold
+        price (int): Platinum price
+        quantity (int): Quantity
+
+    Returns:
+        str: Date that the sell order was accepted
+    """
     headers = {
         'Content-Type' : 'application/json',
         'Authorization' : token,
@@ -87,15 +98,17 @@ def sell_to_market(token:str, id:str, price:int, quantity:int)->str:
     try:
         response = requests.post(f'{URL}/profile/orders', headers=headers, data=json.dumps(data))
         response.raise_for_status()
+        time.sleep(0.4)
         data = response.json()
         order_created = data['payload']['order']['creation_date']
         return order_created
+    
     except HTTPError as http_err:
         print(f'HTTP Error occured: {http_err}')
     except Exception as err:
         print(f'Error occured: {err}')
 
 if __name__ == '__main__':
-    token = login_to_warframe_market()
-    # print(get_price_from_market('mirage_prime_systems'))
-    print(sell_to_market(token, '5a2feeb1c2c9e90cbdaa23d2', 1000, 1))
+    # token = login_to_warframe_market() 
+    # print(get_info_from_market('mirage_prime_systems'))
+    # print(sell_to_market(token, '5a2feeb1c2c9e90cbdaa23d2', 1000, 1))

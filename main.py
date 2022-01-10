@@ -181,7 +181,7 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> datet
         price (int): Target price
 
     Returns:
-        str: Timestamp of the updated order
+        datetime: Timestamp of the updated order
     """
     
     order_id = order.order_id

@@ -3,6 +3,7 @@ import requests
 import os
 import json
 
+from datetime import datetime
 from dataclasses import dataclass
 from typing import List
 from requests.api import get
@@ -170,7 +171,7 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> s
     except Exception as err:
         print(f'Error occured: {err}')
 
-def update_existing_order(token: str, order: ExistingOrder, price: int) -> str:
+def update_existing_order(token: str, order: ExistingOrder, price: int) -> datetime:
     """
     Updates an existing warframe.market order
 
@@ -198,8 +199,10 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> str:
         sleep(0.4)
         response = requests.put(f'{URL}/profile/orders/{order_id}', headers=update_headers, data=json.dumps(data))
         response.raise_for_status()
-        confirmation = response.json()
-        return confirmation['payload']['order']['last_update']
+        response_data = response.json()
+        confirmation_date = response_data['payload']['order']['last_update']
+        update_time = datetime.strptime(confirmation_date, "%Y-%m-%dT%H:%M:%S.%f%z") 
+        return update_time
             
     except HTTPError as http_err:
         print(f'HTTP Error occured: {http_err}')
@@ -209,17 +212,27 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> str:
 
 
 if __name__ == '__main__':
-    try:
-        token = login_to_warframe_market()
-        orders = get_listed_orders()[1:2]
-        
-        for order in orders:
-            lowest_price_on_market = find_lowest_price_for_item(order)
-            target_price = calculate_new_sell_price(lowest_price_on_market)
-            print(f'{order.item_url} was {order.platinum} - lowest {min(lowest_price_on_market)} - we will sell for {target_price}')
-            last_updated = update_existing_order(token, order, target_price)
-            print(f'Order updated at {last_updated}')
+    while True:
+        try:
+            token = login_to_warframe_market()
+            orders = get_listed_orders()
+            
+            for order in orders:
+                lowest_price_on_market = find_lowest_price_for_item(order)
+                target_price = calculate_new_sell_price(lowest_price_on_market)
+                last_updated = update_existing_order(token, order, target_price)
+                message = (
+                    f'[CHECK], '
+                    f'{datetime.now().strftime("%H:%M:%S")}, '
+                    f'ITEM: {order.item_url}, '
+                    f'PRICE: {order.platinum}, ' 
+                    f'LOWEST: {min(lowest_price_on_market)}, '
+                    f'TARGET: {target_price}, '
+                    f'CONFIRM: {last_updated}'
+                )
+                print(message)
+            sleep(1800)
 
-    except Exception as error:
-        print(f'Something went wrong: {error}')
-        quit()
+        except Exception as error:
+            print(f'Something went wrong: {error}')
+            quit()

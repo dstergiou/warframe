@@ -88,6 +88,8 @@ def get_items_to_sell() -> OwnedItem:
     owned_items = {} 
         
     for row in records:
+        if row[16] == 'BUILD':
+            continue
         base_name = row[0].replace(" ", "_")
         blueprint = row[1]
         blueprint_quantity = int(row[2]) if len(row[2]) else 0
@@ -99,7 +101,7 @@ def get_items_to_sell() -> OwnedItem:
         third_component_quantity = int(row[11]) if len(row[11]) else 0
         fourth_component = row[13]
         fourth_component_quantity = int(row[14]) if len(row[14]) else 0
-    
+
         # Blueprint
         if len(blueprint) and blueprint_quantity > 0:
             item_name = f'{base_name}_prime_{blueprint.replace(" ", "_")}'.lower()

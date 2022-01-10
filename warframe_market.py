@@ -108,7 +108,41 @@ def sell_to_market(token:str, id:str, price:int, quantity:int)->str:
     except Exception as err:
         print(f'Error occured: {err}')
 
+def get_my_orders():
+    
+    headers = {
+        'accept': 'application/json',
+        'platform': 'pc',
+    }
+
+    try:
+        response = requests.get(f'{URL}/profile/Kaeriyana/orders', headers=headers)
+        time.sleep(0.4)
+        response.raise_for_status()
+        data = response.json()
+    except HTTPError as http_err:
+        print(f'HTTP Error occured: {http_err}')
+    except Exception as err:
+        print(f'Error occured: {err}')
+        
+    orders = data['payload']['sell_orders']
+    order_list = []
+    
+    for order in orders:
+         order_list.append({
+            'order_id': order['id'],
+            'item_id': order['item']['id'],
+            'item_url' : order['item']['url_name'],
+            'platinum' : order['platinum'],
+            'quantity' : order['quantity'],
+        })
+        
+    return order_list
+    
+
 if __name__ == '__main__':
+    # pass
     # token = login_to_warframe_market() 
     # print(get_info_from_market('mirage_prime_systems'))
     # print(sell_to_market(token, '5a2feeb1c2c9e90cbdaa23d2', 1000, 1))
+    print(get_my_orders())

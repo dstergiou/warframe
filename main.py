@@ -1,3 +1,4 @@
+
 import requests
 import os
 import json
@@ -7,6 +8,8 @@ from typing import List
 from requests.api import get
 from requests.exceptions import HTTPError
 from dotenv import load_dotenv
+from logging import error
+from time import sleep
  
 # Config
 
@@ -25,6 +28,16 @@ EMAIL = os.environ.get('EMAIL')
 PASSWORD = os.environ.get('PASSWORD')
 
 
+# Generic headers for warframe.market API
+headers = {
+        'Content-Type' : 'application/json',
+        'Authorization' : 'JWT',
+        'Accept': 'application/json',
+        'auth_type' : 'header',
+        'language' : 'en',
+        'platform' : 'pc',
+    }
+
 @dataclass
 class ExistingOrder:
     order_id: str
@@ -34,7 +47,7 @@ class ExistingOrder:
     item_url: str
     
     
-def get_my_orders(profile:str = PROFILE_NAME) -> List[ExistingOrder]:
+def get_listed_orders(profile:str = PROFILE_NAME) -> List[ExistingOrder]:
     """
     Get all selling orders for profile from warframe.market API
 
@@ -127,10 +140,10 @@ def calculate_new_sell_price(current_prices: list, min_price: int = MIN_PRICE) -
         int: Undercuttting price
     """
     
-    if current_prices -1 < min_price:
-        return current_prices
+    if min(current_prices) -1 < min_price:
+        return min(current_prices)
     
-    return current_prices - 1
+    return min(current_prices) - 1
 
 def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> str:
     """
@@ -139,15 +152,6 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> s
     Returns:
         str: JWT token needed for authenticated calls to warframe.market API
     """
-    
-    headers = {
-        'Content-Type' : 'application/json',
-        'Authorization' : 'JWT',
-        'Accept': 'application/json',
-        'auth_type' : 'header',
-        'language' : 'en',
-        'platform' : 'pc',
-    }
     
     data = {
         'email' : email,
@@ -166,9 +170,56 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> s
     except Exception as err:
         print(f'Error occured: {err}')
 
+def update_existing_order(token: str, order: ExistingOrder, price: int) -> str:
+    """
+    Updates an existing warframe.market order
+
+    Args:
+        token (str): JWT Authentication token
+        order (ExistingOrder): Order to be updated
+        price (int): Target price
+
+    Returns:
+        str: Timestamp of the updated order
+    """
+    
+    order_id = order.order_id
+    authorization_header = {
+          'Authorization' : token,
+    }
+    
+    update_headers = headers | authorization_header
+    
+    data = {
+        'platinum' : price,
+    }
+    
+    try:
+        sleep(0.4)
+        response = requests.put(f'{URL}/profile/orders/{order_id}', headers=update_headers, data=json.dumps(data))
+        response.raise_for_status()
+        confirmation = response.json()
+        return confirmation['payload']['order']['last_update']
+            
+    except HTTPError as http_err:
+        print(f'HTTP Error occured: {http_err}')
+    except Exception as err:
+        print(f'Error occured: {err}')
+
+
+
 if __name__ == '__main__':
-    test_order = get_my_orders()[0]
-    price = find_lowest_price_for_item(test_order)
-    print(f'Lowest price for {test_order.item_url} is {min(price)}')
-    # print(calculate_new_sell_price(18))
-    # print(login_to_warframe_market())
+    try:
+        token = login_to_warframe_market()
+        orders = get_listed_orders()[1:2]
+        
+        for order in orders:
+            lowest_price_on_market = find_lowest_price_for_item(order)
+            target_price = calculate_new_sell_price(lowest_price_on_market)
+            print(f'{order.item_url} was {order.platinum} - lowest {min(lowest_price_on_market)} - we will sell for {target_price}')
+            last_updated = update_existing_order(token, order, target_price)
+            print(f'Order updated at {last_updated}')
+
+    except Exception as error:
+        print(f'Something went wrong: {error}')
+        quit()

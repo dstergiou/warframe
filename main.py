@@ -218,19 +218,27 @@ if __name__ == '__main__':
             orders = get_listed_orders()
             
             for order in orders:
+                profit_and_loss = 0
                 lowest_price_on_market = find_lowest_price_for_item(order)
                 target_price = calculate_new_sell_price(lowest_price_on_market)
+                profit_and_loss += target_price - min(lowest_price_on_market)
                 last_updated = update_existing_order(token, order, target_price)
-                message = (
-                    f'[CHECK], '
+                action_message = (
+                    f'[ACTION], '
                     f'{datetime.now().strftime("%H:%M:%S")}, '
                     f'ITEM: {order.item_url}, '
                     f'PRICE: {order.platinum}, ' 
                     f'LOWEST: {min(lowest_price_on_market)}, '
                     f'TARGET: {target_price}, '
-                    f'CONFIRM: {last_updated}'
+                    f'CONFIRM: {last_updated.strftime("%H:%M:%S")}'
                 )
-                print(message)
+                print(action_message)
+            summary_message = (
+                f'[SUMMARY], '
+                f'ORDERS: {len(orders)}, '
+                f'PL: {profit_and_loss}'
+            )
+            print(summary_message)
             sleep(1800)
 
         except Exception as error:

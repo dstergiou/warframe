@@ -15,7 +15,7 @@ from time import sleep
 # Config
 
 # We won't list or sell anything under this much platinum
-MIN_PRICE = 10                
+MIN_PRICE = 10        
 
 # Base URL for Warframe market
 URL = 'https://api.warframe.market/v1'  
@@ -46,6 +46,7 @@ class ExistingOrder:
     platinum: int
     item_id: str
     item_url: str
+    ducats: int
     
     
 def get_listed_orders(profile:str = PROFILE_NAME) -> List[ExistingOrder]:
@@ -82,7 +83,8 @@ def get_listed_orders(profile:str = PROFILE_NAME) -> List[ExistingOrder]:
             line['quantity'],
             line['platinum'],
             line['item']['id'],
-            line['item']['url_name'] 
+            line['item']['url_name'],
+            line['item']['ducats'] 
         ))
     
     return orders
@@ -142,7 +144,7 @@ def calculate_new_sell_price(current_prices: list, min_price: int = MIN_PRICE) -
     """
     
     if min(current_prices) -1 < min_price:
-        return min(current_prices)
+        return min_price
     
     return min(current_prices) - 1
 
@@ -210,12 +212,15 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> datet
         print(f'Error occured: {err}')
 
 
-
 if __name__ == '__main__':
     while True:
         try:
             token = login_to_warframe_market()
             orders = get_listed_orders()
+            
+            if not len(orders):
+                print(f'No orders found - quiting')
+                quit()
             
             for order in orders:
                 profit_and_loss = 0
@@ -232,12 +237,15 @@ if __name__ == '__main__':
                     f'TARGET: {target_price}, '
                     f'CONFIRM: {last_updated.strftime("%H:%M:%S")}'
                 )
+
                 print(action_message)
+            
             summary_message = (
                 f'[SUMMARY], '
                 f'ORDERS: {len(orders)}, '
                 f'PL: {profit_and_loss}'
             )
+            
             print(summary_message)
             sleep(1800)
 

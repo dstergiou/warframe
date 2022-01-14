@@ -43,13 +43,14 @@ PASSWORD = os.environ.get('PASSWORD')
 
 # Generic headers for warframe.market API
 headers = {
-        'Content-Type' : 'application/json',
-        'Authorization' : 'JWT',
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT',
         'Accept': 'application/json',
-        'auth_type' : 'header',
-        'language' : 'en',
-        'platform' : 'pc',
+        'auth_type': 'header',
+        'language': 'en',
+        'platform': 'pc',
     }
+
 
 @dataclass
 class ExistingOrder:
@@ -60,14 +61,15 @@ class ExistingOrder:
     item_url: str
     ducats: int
 
-@dataclass 
+
+@dataclass
 class NewOrder:
     item_id: str
     price: int
     quantity: int
     
     
-def get_existing_orders(profile:str = PROFILE_NAME) -> List[ExistingOrder]:
+def get_existing_orders(profile: str = PROFILE_NAME) -> List[ExistingOrder]:
     """
     Get all selling orders for profile from warframe.market API
 
@@ -78,35 +80,35 @@ def get_existing_orders(profile:str = PROFILE_NAME) -> List[ExistingOrder]:
         List[ExistingOrder]: A list of ExistingOrders
     """
     
-    headers = {
+    local_headers = {
         'accept': 'application/json',
         'platform': 'pc',
     }
 
     try:
-        response = requests.get(f'{URL}/profile/{PROFILE_NAME}/orders', headers=headers)
+        response = requests.get(f'{URL}/profile/{PROFILE_NAME}/orders', headers=local_headers)
         response.raise_for_status()
         data = response.json()
+        clean_json = data['payload']['sell_orders']
+        existing_orders = []
+        for line in clean_json:
+            existing_orders.append(ExistingOrder(
+                line['id'],
+                line['quantity'],
+                line['platinum'],
+                line['item']['id'],
+                line['item']['url_name'],
+                line['item'].get('ducats'),
+            ))
+        return existing_orders
+
     except HTTPError as http_err:
-        print(f'HTTP Error occured: {http_err}')
+        print(f'HTTP Error occurred: {http_err}')
     except Exception as err:
-        print(f'Error occured: {err}')
-    
-    clean_json = data['payload']['sell_orders']
-    orders = []
-    
-    for line in clean_json:
-        orders.append(ExistingOrder(
-            line['id'],
-            line['quantity'],
-            line['platinum'],
-            line['item']['id'],
-            line['item']['url_name'],
-            line['item'].get('ducats'),
-        ))
-    return orders
-    
-def find_lowest_price_for_order(order: ExistingOrder) -> list:
+        print(f'Error occurred: {err}')
+
+
+def find_lowest_price_for_order(order: ExistingOrder) -> list[int]:
     """
     Scan the warfame.market API for an item and return the lowest price the item
     sells for by a player who is currently "in game".
@@ -115,81 +117,81 @@ def find_lowest_price_for_order(order: ExistingOrder) -> list:
         order (ExistingOrder): An ExistingOrder instance
 
     Returns:
-        list: A list of the 5 lowest prices
+        list[int]: A list of the 5 lowest prices
     """
     
-    headers = {
+    local_headers = {
         'accept': 'application/json',
         'platform': 'pc',
     }
 
     try:
-        response = requests.get(f'{URL}/items/{order.item_url}/orders', headers=headers)
+        response = requests.get(f'{URL}/items/{order.item_url}/orders', headers=local_headers)
         response.raise_for_status()
         data = response.json()
+        orders = data['payload']['orders']
+        lowest_price = 100000  # I assume nothing sells for this much!!!
+        price_list = []
+
+        for order in orders:
+            if order['order_type'] == 'sell' \
+                    and order['user']['status'] == 'ingame' \
+                    and order['user']['ingame_name'] != PROFILE_NAME:
+
+                price_list.append(order['platinum'])
+                if int(order['platinum']) < lowest_price:
+                    lowest_price = int(order['platinum'])
+
+        return sorted(price_list)[:5]
+
     except HTTPError as http_err:
-        print(f'HTTP Error occured: {http_err}')
+        print(f'HTTP Error occurred: {http_err}')
     except Exception as err:
-        print(f'Error occured: {err}')
+        print(f'Error occurred: {err}')
     
-    orders = data['payload']['orders']
-    lowest_price = 100000          # I assume nothing sells for this much!!!
-    price_list = []
-    
-    for order in orders:
-        if order['order_type'] == 'sell' \
-            and order['user']['status'] == 'ingame' \
-            and order['user']['ingame_name'] != PROFILE_NAME:
 
-            price_list.append(order['platinum'])
-            if int(order['platinum']) < lowest_price:
-                lowest_price = int(order['platinum'])
-                          
-    # return lowest_price
-    return sorted(price_list)[:5]
-
-def find_lowest_price_for_item(item:str) -> int:
+def find_lowest_price_for_item(item: str) -> list[int]:
     """
-    Retuens the lowest price for an item on warframe.market
+    Returns the lowest price for an item on warframe.market
 
     Args:
         item (str): Name of the item (e.g. mirage_prime_systems)
 
     Returns:
-        int: Lowest price for an online seller
+       list[int]: Returns 5 lowest prices
     """
     
-    headers = {
+    local_headers = {
         'accept': 'application/json',
         'platform': 'pc',
     }
 
     try:
         sleep(DEFAULT_SLEEP)
-        response = requests.get(f'{URL}/items/{item}/orders', headers=headers)
+        response = requests.get(f'{URL}/items/{item}/orders', headers=local_headers)
         response.raise_for_status()
         data = response.json()
-    except HTTPError as http_err:
-        print(f'HTTP Error occured: {http_err}')
-    except Exception as err:
-        print(f'Error occured: {err}')
-    
-    orders = data['payload']['orders']
-    lowest_price = 100000          # I assume nothing sells for this much!!!
-    price_list = []
-    
-    for order in orders:
-        if order['order_type'] == 'sell' \
-            and order['user']['status'] == 'ingame' \
-            and order['user']['ingame_name'] != PROFILE_NAME:
+        orders = data['payload']['orders']
+        lowest_price = 100000  # I assume nothing sells for this much!!!
+        price_list = []
 
-            price_list.append(order['platinum'])
-            if int(order['platinum']) < lowest_price:
-                lowest_price = int(order['platinum'])
-                          
-    # return lowest_price
-    return sorted(price_list)[:5]
-    pass
+        for order in orders:
+            if order['order_type'] == 'sell' \
+                    and order['user']['status'] == 'ingame' \
+                    and order['user']['ingame_name'] != PROFILE_NAME:
+
+                price_list.append(order['platinum'])
+                if int(order['platinum']) < lowest_price:
+                    lowest_price = int(order['platinum'])
+
+        # return lowest_price
+        return sorted(price_list)[:5]
+
+    except HTTPError as http_err:
+        print(f'HTTP Error occurred: {http_err}')
+    except Exception as err:
+        print(f'Error occurred: {err}')
+    
 
 def calculate_new_sell_price(current_prices: list, min_price: int = MIN_PRICE) -> int:
     """
@@ -215,6 +217,7 @@ def calculate_new_sell_price(current_prices: list, min_price: int = MIN_PRICE) -
         return min_price
     return round(math.floor(avg))
 
+
 def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> str:
     """
     Logins to warframe.market and returns a JWT token for authenticated calls
@@ -224,9 +227,9 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> s
     """
     
     data = {
-        'email' : email,
-        'password' : password,
-        'auth_type' : 'header',
+        'email': email,
+        'password': password,
+        'auth_type': 'header',
     }
     
     try:
@@ -236,9 +239,10 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> s
         return token
             
     except HTTPError as http_err:
-        print(f'HTTP Error occured: {http_err}')
+        print(f'HTTP Error occurred: {http_err}')
     except Exception as err:
-        print(f'Error occured: {err}')
+        print(f'Error occurred: {err}')
+
 
 def update_existing_order(token: str, order: ExistingOrder, price: int) -> datetime:
     """
@@ -261,7 +265,7 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> datet
     update_headers = headers | authorization_header
     
     data = {
-        'platinum' : price,
+        'platinum': price,
     }
     
     try:
@@ -274,9 +278,10 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> datet
         return update_time
             
     except HTTPError as http_err:
-        print(f'HTTP Error occured: {http_err}')
+        print(f'HTTP Error occurred: {http_err}')
     except Exception as err:
-        print(f'Error occured: {err}')
+        print(f'Error occurred: {err}')
+
 
 def calculate_ducats_to_plat_ratio(order: ExistingOrder) -> float:
     """
@@ -291,6 +296,7 @@ def calculate_ducats_to_plat_ratio(order: ExistingOrder) -> float:
     if order.ducats is None:
         return DUCAT_RATIO + 1
     return round(order.ducats / order.platinum, 2)
+
 
 def get_item_id_from_market(item:str) -> str:
     """
@@ -307,13 +313,14 @@ def get_item_id_from_market(item:str) -> str:
         sleep(DEFAULT_SLEEP)
         response.raise_for_status()
         data = response.json()
+        item_id = data['payload']['item']['id']
+        return item_id
+
     except HTTPError as http_err:
         print(f'HTTP Error occured: {http_err}')
     except Exception as err:
         print(f'Error occured: {err}')
-        
-    item_id = data['payload']['item']['id']
-    return item_id
+
 
 def get_item_id_from_file(item:str) -> str:
     """
@@ -333,6 +340,7 @@ def get_item_id_from_file(item:str) -> str:
                 return row[1]
     return "Not found"
 
+
 def create_new_order(token:str, item: NewOrder)->str:
     """
     Sells an item on warframe.market
@@ -351,10 +359,10 @@ def create_new_order(token:str, item: NewOrder)->str:
     update_headers = headers | authorization_header
            
     data = {
-        'item_id' : item.item_id,
-        'order_type' : 'sell',
-        'platinum' : item.price,
-        'quantity' : item.quantity,
+        'item_id': item.item_id,
+        'order_type': 'sell',
+        'platinum': item.price,
+        'quantity': item.quantity,
     }
     
     try:
@@ -366,11 +374,12 @@ def create_new_order(token:str, item: NewOrder)->str:
         return order_created
     
     except HTTPError as http_err:
-        print(f'HTTP Error occured: {http_err}')
+        print(f'HTTP Error occurred: {http_err}')
     except Exception as err:
-        print(f'Error occured: {err}')
+        print(f'Error occurred: {err}')
 
-def find_most_expensive_items_to_sell(file: str, num: int=50) -> list[Union[str, int]]:
+
+def find_most_expensive_items_to_sell(file: str, num: int = 50) -> list[list[str, int, int]]:
     """
     Go through the list of owned items and find the most expensive ones on warframe.market
     Since we have a limit of 100 orders, we will return 95 (in case we have non prime orders going)
@@ -380,28 +389,20 @@ def find_most_expensive_items_to_sell(file: str, num: int=50) -> list[Union[str,
         num (int): Number of deals to return
 
     Returns:
-        list[Union[str, int, int]]: List of lists (e.g [[item1, price, quantity], [item2, price, quantity]])
+        list[list[str, int, int]]: List of lists (e.g [[item1, price, quantity], [item2, price, quantity]])
     """
     
     deals_to_make = []
-    # with open(file) as f:
-    #     data = json.load(f)
-    #     for item in data:
-    #         print(f'Checking {item}...')
-    #         price_list = find_lowest_price_for_item(item)
-    #         price = min(price_list)
-    #         quantity = data[item]
-    #         deals_to_make.append([item, price, quantity])
-    
     data = json.loads(file)
     for item in data:
-            print(f'Checking {item}...')
-            price_list = find_lowest_price_for_item(item)
-            price = min(price_list)
-            quantity = data[item]
-            deals_to_make.append([item, price, quantity])
+        print(f'Checking {item}...')
+        price_list = find_lowest_price_for_item(item)
+        price = min(price_list)
+        quantity = data[item]
+        deals_to_make.append([item, price, quantity])
             
     return sorted(deals_to_make, key=itemgetter(1), reverse=True)[:num]
+
 
 if __name__ == '__main__':
     

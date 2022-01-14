@@ -2,9 +2,10 @@ import requests
 import time
 import json
 import os
+import csv
 from dotenv import load_dotenv
 from requests.exceptions import HTTPError
-from db import get_items_to_sell, get_items_to_buy
+from db import get_items_to_sell, get_items_to_buy, get_all_prime_items
 
 URL = 'https://api.warframe.market/v1'
 load_dotenv()
@@ -28,15 +29,13 @@ def get_info_from_market(item:str):
         
     orders = data['payload']['orders']
     
-    item_id = data['payload']['orders'][0]['id']
-
     lowest_price = 10000
     for order in orders:
         if order['order_type'] == 'sell' and order['user']['status'] == 'ingame':
             if int(order['platinum']) < lowest_price:
                 lowest_price = int(order['platinum'])
     
-    return item_id, lowest_price
+    return lowest_price
              
 def login_to_warframe_market() -> str: 
     
@@ -108,15 +107,14 @@ def sell_to_market(token:str, id:str, price:int, quantity:int)->str:
     except Exception as err:
         print(f'Error occured: {err}')
 
-def get_my_orders():
-    
+def get_id_from_market(item):
     headers = {
         'accept': 'application/json',
         'platform': 'pc',
     }
 
     try:
-        response = requests.get(f'{URL}/profile/Kaeriyana/orders', headers=headers)
+        response = requests.get(f'{URL}/items/{item}', headers=headers)
         time.sleep(0.4)
         response.raise_for_status()
         data = response.json()
@@ -124,25 +122,32 @@ def get_my_orders():
         print(f'HTTP Error occured: {http_err}')
     except Exception as err:
         print(f'Error occured: {err}')
-        
-    orders = data['payload']['sell_orders']
-    order_list = []
+           
+    item_id = data['payload']['item']['id']
+    return item_id
     
-    for order in orders:
-         order_list.append({
-            'order_id': order['id'],
-            'item_id': order['item']['id'],
-            'item_url' : order['item']['url_name'],
-            'platinum' : order['platinum'],
-            'quantity' : order['quantity'],
-        })
-        
-    return order_list
     
-
 if __name__ == '__main__':
     # pass
-    # token = login_to_warframe_market() 
+    token = login_to_warframe_market() 
     # print(get_info_from_market('mirage_prime_systems'))
     # print(sell_to_market(token, '5a2feeb1c2c9e90cbdaa23d2', 1000, 1))
-    print(get_my_orders())
+    # print(get_items_to_sell())
+    
+    # primes = get_items_to_sell()
+    # for key in primes:
+    #     item_id = get_id_from_market(key)
+    #     price = get_info_from_market(key)
+    #     print(f'{key},{item_id},{primes[key]}, {price}')
+
+    # print(sell_to_market(token,'5a4a4036dd791301749996ca', 10, 1))
+    
+    # with open('orders.csv') as csv_file:
+    #     csv_reader = csv.reader(csv_file, delimiter=',')
+    #     for row in csv_reader:
+    #         print(sell_to_market(token, row[1], row[3], row[2]))
+    with open('items.db', 'w', newline='') as f:
+        writer = csv.writer(f)
+        for item in get_all_prime_items():
+            row = [item, get_id_from_market(item)]
+            writer.writerow(row)

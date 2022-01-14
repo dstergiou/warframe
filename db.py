@@ -9,7 +9,7 @@ class OwnedItem(TypedDict):
 DB_FILE = 'warframe.db'   
 SHEET = 'Warframe'
 WORKSHEET = 'Prime' 
-RANGE = 'A2:R108'
+RANGE = 'A2:R109'
 KEY = 'sheets.json'
 
 def read_data_from_sheet(sheet:str=SHEET, worksheet:str=WORKSHEET, range:str=RANGE) -> list[list[str]]:
@@ -41,7 +41,6 @@ def get_all_prime_items() -> list[str]:
     all_items = []
         
     for row in records:      
-        print(row)    
         base_name = row[0].replace(" ", "_")
         blueprint = row[1]
         first_component = row[4]
@@ -51,6 +50,8 @@ def get_all_prime_items() -> list[str]:
     
         # Blueprint
         if len(blueprint):
+            if base_name.lower() == 'kavasa':
+                continue
             item_name = f'{base_name}_prime_{blueprint.replace(" ", "_")}'.lower()
             all_items.append(item_name)
         
@@ -188,4 +189,11 @@ if __name__ == '__main__':
     # db = create_db_connection()
     # create_db_table(db)
     # print(sheet_to_db(db))
-    print(get_items_to_buy())
+    # print(get_items_to_buy())
+    # primes = get_items_to_sell()
+    # for key in primes:
+    #     item_id, price = get_info_from_market(key)
+    #     print(f'{key},{item_id},{primes[key]},{price}')
+    
+    print(get_items_to_sell())
+    # pass

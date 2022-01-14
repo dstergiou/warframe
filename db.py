@@ -1,3 +1,4 @@
+import json
 import gspread
 from sqlite3  import Error
 from typing import TypedDict
@@ -128,7 +129,7 @@ def get_items_to_sell() -> OwnedItem:
             item_name = f'{base_name}_prime_{fourth_component.replace(" ", "_")}'.lower()
             owned_items[item_name] = fourth_component_quantity
 
-    return owned_items
+    return json.dumps(owned_items)
 
 def get_items_to_buy() -> list[str]:
     """

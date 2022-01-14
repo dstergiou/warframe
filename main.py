@@ -7,7 +7,7 @@ import math
 
 from datetime import datetime
 from dataclasses import dataclass
-from typing import List
+from typing import List, Union
 from requests.api import get
 from requests.exceptions import HTTPError
 from dotenv import load_dotenv
@@ -15,7 +15,7 @@ from logging import error
 from time import sleep
 from operator import itemgetter
  
-from db import get_all_prime_items
+from db import get_items_to_sell
  
 # Config
 
@@ -25,6 +25,9 @@ MIN_PRICE = 10
 # Random placeholder price for items we intend to sell for dicats
 DUCAT_PRICE = 421     
 DUCAT_RATIO = 8 
+
+# Default sleep time to not annoy the warframe.market API
+DEFAULT_SLEEP=0.4
 
 # Base URL for Warframe market
 URL = 'https://api.warframe.market/v1'  
@@ -162,6 +165,7 @@ def find_lowest_price_for_item(item:str) -> int:
     }
 
     try:
+        sleep(DEFAULT_SLEEP)
         response = requests.get(f'{URL}/items/{item}/orders', headers=headers)
         response.raise_for_status()
         data = response.json()
@@ -261,7 +265,7 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> datet
     }
     
     try:
-        sleep(0.4)
+        sleep(DEFAULT_SLEEP)
         response = requests.put(f'{URL}/profile/orders/{order_id}', headers=update_headers, data=json.dumps(data))
         response.raise_for_status()
         response_data = response.json()
@@ -300,7 +304,7 @@ def get_item_id_from_market(item:str) -> str:
     """
     try:
         response = requests.get(f'{URL}/items/{item}', headers=headers)
-        sleep(0.4)
+        sleep(DEFAULT_SLEEP)
         response.raise_for_status()
         data = response.json()
     except HTTPError as http_err:
@@ -339,6 +343,7 @@ def create_new_order(token:str, item: NewOrder)->str:
     Returns:
         str: Date that the sell order was accepted
     """
+    
     authorization_header = {
           'Authorization' : token,
     }
@@ -348,14 +353,14 @@ def create_new_order(token:str, item: NewOrder)->str:
     data = {
         'item_id' : item.item_id,
         'order_type' : 'sell',
-        'platinum' : item.item_id,
+        'platinum' : item.price,
         'quantity' : item.quantity,
     }
     
     try:
+        sleep(DEFAULT_SLEEP)
         response = requests.post(f'{URL}/profile/orders', headers=update_headers, data=json.dumps(data))
         response.raise_for_status()
-        sleep(0.4)
         data = response.json()
         order_created = data['payload']['order']['creation_date']
         return order_created
@@ -365,31 +370,50 @@ def create_new_order(token:str, item: NewOrder)->str:
     except Exception as err:
         print(f'Error occured: {err}')
 
-def find_most_expensive_items_to_sell(file: str) -> list(list):
+def find_most_expensive_items_to_sell(file: str, num: int=50) -> list[Union[str, int]]:
     """
     Go through the list of owned items and find the most expensive ones on warframe.market
+    Since we have a limit of 100 orders, we will return 95 (in case we have non prime orders going)
 
     Args:
         file (str): JSON file containing the results from "get_items_to_sell" from db.py
+        num (int): Number of deals to return
 
     Returns:
-        list(list): List of lists (e.g [[item1, price], [item2, price]])
+        list[Union[str, int, int]]: List of lists (e.g [[item1, price, quantity], [item2, price, quantity]])
     """
     
     deals_to_make = []
-    with open(file) as f:
-        data = json.load(f)
-        for item in data:
+    # with open(file) as f:
+    #     data = json.load(f)
+    #     for item in data:
+    #         print(f'Checking {item}...')
+    #         price_list = find_lowest_price_for_item(item)
+    #         price = min(price_list)
+    #         quantity = data[item]
+    #         deals_to_make.append([item, price, quantity])
+    
+    data = json.loads(file)
+    for item in data:
+            print(f'Checking {item}...')
             price_list = find_lowest_price_for_item(item)
             price = min(price_list)
-            deals_to_make.append([item, price])
+            quantity = data[item]
+            deals_to_make.append([item, price, quantity])
             
-    return sorted(deals_to_make, key=itemgetter(1), reverse=True)
+    return sorted(deals_to_make, key=itemgetter(1), reverse=True)[:num]
 
 if __name__ == '__main__':
-       
-       
-    print(find_most_expensive_items_to_sell('tosell.json'))
+    
+    token = login_to_warframe_market()
+    items_to_sell = get_items_to_sell()
+    best_deals_to_make = find_most_expensive_items_to_sell(items_to_sell, num=10)
+    for deal in best_deals_to_make:
+        item_id = get_item_id_from_file(deal[0])
+        price = deal[1]
+        quantity = deal[2]
+        new_order = NewOrder(item_id=item_id, price=price, quantity=quantity)
+        print(create_new_order(token, new_order))
     quit()
     
     while True:

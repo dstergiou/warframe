@@ -27,7 +27,10 @@ DUCAT_PRICE = 421
 DUCAT_RATIO = 8 
 
 # Default sleep time to not annoy the warframe.market API
-DEFAULT_SLEEP=0.4
+DEFAULT_SLEEP = 0.4
+
+# How many orders to create initially
+DEFAULT_ORDERS = 10
 
 # Base URL for Warframe market
 URL = 'https://api.warframe.market/v1'  
@@ -379,7 +382,7 @@ def create_new_order(token:str, item: NewOrder)->str:
         print(f'Error occurred: {err}')
 
 
-def find_most_expensive_items_to_sell(file: str, num: int = 50) -> list[list[str, int, int]]:
+def find_most_expensive_items_to_sell(file: str, num: int = DEFAULT_ORDERS) -> list[list[str, int, int]]:
     """
     Go through the list of owned items and find the most expensive ones on warframe.market
     Since we have a limit of 100 orders, we will return 95 (in case we have non prime orders going)
@@ -404,48 +407,82 @@ def find_most_expensive_items_to_sell(file: str, num: int = 50) -> list[list[str
     return sorted(deals_to_make, key=itemgetter(1), reverse=True)[:num]
 
 
-if __name__ == '__main__':
-    
-    token = login_to_warframe_market()
+def menu_menu() -> None:
+    print(f'1. Create initial orders')
+    print(f'2. Update existing orders')
+
+
+def menu_initial_orders(num: int = DEFAULT_ORDERS) -> int:
+    """
+     Create the initial orders to be posted
+     Args:
+         num (int): Number of orders to be created
+
+     Returns:
+         int: Number of orders created
+     """
+
     items_to_sell = get_items_to_sell()
-    best_deals_to_make = find_most_expensive_items_to_sell(items_to_sell, num=10)
+    best_deals_to_make = find_most_expensive_items_to_sell(items_to_sell, num=num)
+    order_counter = 0
     for deal in best_deals_to_make:
         item_id = get_item_id_from_file(deal[0])
         price = deal[1]
         quantity = deal[2]
         new_order = NewOrder(item_id=item_id, price=price, quantity=quantity)
-        print(create_new_order(token, new_order))
-    quit()
-    
-    while True:
         try:
-            token = login_to_warframe_market()
-            orders = get_existing_orders()
-            
-            if not len(orders):
-                print(f'No orders found - quiting')
-                quit()
-            
-            for order in orders:
-                lowest_price_on_market = find_lowest_price_for_order(order)
-                target_price = calculate_new_sell_price(lowest_price_on_market)               
-                dpr = calculate_ducats_to_plat_ratio(order)
-                if dpr <= DUCAT_RATIO:
-                    target_price = DUCAT_PRICE
-                last_updated = update_existing_order(token, order, target_price)
-                action_message = (
-                    f'{datetime.now().strftime("%H:%M:%S")}, '
-                    f'ITEM: {order.item_url}, '
-                    f'PRICE: {order.platinum}, ' 
-                    f'LOWEST: {min(lowest_price_on_market)}, '
-                    f'TARGET: {target_price}, '
-                    f'DPR: {dpr}'
-                )
-
-                print(action_message)
-            
-            sleep(1800)
-
+            _ = create_new_order(token, new_order)
+            order_counter += 1
         except Exception as error:
-            print(f'Something went wrong: {error}')
+            print(f'Order was not created. Error: {error}')
+
+    return order_counter
+
+
+def menu_update_orders() -> None:
+    try:
+        orders = get_existing_orders()
+
+        if not len(orders):
+            print(f'No orders found - quiting')
             quit()
+
+        for order in orders:
+            lowest_price_on_market = find_lowest_price_for_order(order)
+            target_price = calculate_new_sell_price(lowest_price_on_market)
+            dpr = calculate_ducats_to_plat_ratio(order)
+            if dpr <= DUCAT_RATIO:
+                target_price = DUCAT_PRICE
+            _ = update_existing_order(token, order, target_price)
+            action_message = (
+                f'{datetime.now().strftime("%H:%M:%S")}, '
+                f'ITEM: {order.item_url}, '
+                f'PRICE: {order.platinum}, '
+                f'LOWEST: {min(lowest_price_on_market)}, '
+                f'TARGET: {target_price}, '
+                f'DPR: {dpr}'
+            )
+
+            print(action_message)
+
+    except Exception as error:
+        print(f'Something went wrong: {error}')
+        quit()
+
+
+if __name__ == '__main__':
+    try:
+        token = login_to_warframe_market()
+    except Exception as error:
+        print(f'Login failed with error: {error}')
+
+    menu_menu()
+    menu_input = int(input('> '))
+    match menu_input:
+        case 1:
+            menu_initial_orders()
+            quit()
+        case 2:
+            menu_update_orders()
+            quit()
+

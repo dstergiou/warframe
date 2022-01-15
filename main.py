@@ -22,7 +22,7 @@ from db import get_items_to_sell
 # We won't list or sell anything under this much platinum
 MIN_PRICE = 10 
 
-# Random placeholder price for items we intend to sell for dicats
+# Random placeholder price for items we intend to sell for ducats
 DUCAT_PRICE = 421     
 DUCAT_RATIO = 8 
 
@@ -89,7 +89,7 @@ def get_existing_orders(profile: str = PROFILE_NAME) -> List[ExistingOrder]:
     }
 
     try:
-        response = requests.get(f'{URL}/profile/{PROFILE_NAME}/orders', headers=local_headers)
+        response = requests.get(f'{URL}/profile/{profile}/orders', headers=local_headers)
         response.raise_for_status()
         data = response.json()
         clean_json = data['payload']['sell_orders']
@@ -207,7 +207,7 @@ def calculate_new_sell_price(current_prices: list, min_price: int = MIN_PRICE) -
         min_price (int, optional): Price we won't go below. Defaults to MIN_PRICE.
 
     Returns:
-        int: Undercuttting price
+        int: Undercutting price
     """
     
     # if min(current_prices) -1 < min_price:
@@ -216,12 +216,12 @@ def calculate_new_sell_price(current_prices: list, min_price: int = MIN_PRICE) -
     # return min(current_prices) - 1
     
     avg = sum(current_prices) / len(current_prices)
-    if avg -1 < min_price:
+    if avg - 1 < min_price:
         return min_price
     return round(math.floor(avg))
 
 
-def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> str:
+def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD) -> str:
     """
     Logins to warframe.market and returns a JWT token for authenticated calls
 
@@ -238,8 +238,8 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> s
     try:
         response = requests.post(f'{URL}/auth/signin', headers=headers, data=json.dumps(data))
         response.raise_for_status()
-        token = response.headers["Authorization"]
-        return token
+        authentication_token = response.headers["Authorization"]
+        return authentication_token
             
     except HTTPError as http_err:
         print(f'HTTP Error occurred: {http_err}')
@@ -247,12 +247,12 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD ) -> s
         print(f'Error occurred: {err}')
 
 
-def update_existing_order(token: str, order: ExistingOrder, price: int) -> datetime:
+def update_existing_order(auth_token: str, order: ExistingOrder, price: int) -> datetime:
     """
     Updates an existing warframe.market order
 
     Args:
-        token (str): JWT Authentication token
+        auth_token (str): JWT Authentication token
         order (ExistingOrder): Order to be updated
         price (int): Target price
 
@@ -262,7 +262,7 @@ def update_existing_order(token: str, order: ExistingOrder, price: int) -> datet
     
     order_id = order.order_id
     authorization_header = {
-          'Authorization' : token,
+          'Authorization': auth_token,
     }
     
     update_headers = headers | authorization_header
@@ -301,7 +301,7 @@ def calculate_ducats_to_plat_ratio(order: ExistingOrder) -> float:
     return round(order.ducats / order.platinum, 2)
 
 
-def get_item_id_from_market(item:str) -> str:
+def get_item_id_from_market(item: str) -> str:
     """
     Return the id of an item when provided the name (e.g: hikou_prime_blueprint)
 
@@ -309,7 +309,7 @@ def get_item_id_from_market(item:str) -> str:
         item (str): Item name (e.g: hikou_prime_blueprint)
 
     Returns:
-        str: ID of the item on warframe.market (e.g: 5a2feeb1c2c9e90cbdaa23d2)
+        str: ID of the item on warframe.market (e.g: '5a2feeb1c2c9e90cbdaa23d2')
     """
     try:
         response = requests.get(f'{URL}/items/{item}', headers=headers)
@@ -320,12 +320,12 @@ def get_item_id_from_market(item:str) -> str:
         return item_id
 
     except HTTPError as http_err:
-        print(f'HTTP Error occured: {http_err}')
+        print(f'HTTP Error occurred: {http_err}')
     except Exception as err:
-        print(f'Error occured: {err}')
+        print(f'Error occurred: {err}')
 
 
-def get_item_id_from_file(item:str) -> str:
+def get_item_id_from_file(item: str) -> str:
     """
     Find the warframe.market ID from the local database
 
@@ -344,19 +344,19 @@ def get_item_id_from_file(item:str) -> str:
     return "Not found"
 
 
-def create_new_order(token:str, item: NewOrder)->str:
+def create_new_order(auth_token: str, item: NewOrder) -> str:
     """
     Sells an item on warframe.market
     
     Args:
-        token (str): JWT Token
+        auth_token (str): JWT Token
         item (NewOrder): An object containing item_id, price and quantity
     Returns:
         str: Date that the sell order was accepted
     """
     
     authorization_header = {
-          'Authorization' : token,
+          'Authorization': auth_token,
     }
     
     update_headers = headers | authorization_header
@@ -385,7 +385,7 @@ def create_new_order(token:str, item: NewOrder)->str:
 def find_most_expensive_items_to_sell(file: str, num: int = DEFAULT_ORDERS) -> list[list[str, int, int]]:
     """
     Go through the list of owned items and find the most expensive ones on warframe.market
-    Since we have a limit of 100 orders, we will return 95 (in case we have non prime orders going)
+    Since we have a limit of 100 orders, we will return 95 (in case we have non-prime orders going)
 
     Args:
         file (str): JSON file containing the results from "get_items_to_sell" from db.py
@@ -433,8 +433,8 @@ def menu_initial_orders(num: int = DEFAULT_ORDERS) -> int:
         try:
             _ = create_new_order(token, new_order)
             order_counter += 1
-        except Exception as error:
-            print(f'Order was not created. Error: {error}')
+        except Exception as e:
+            print(f'Order was not created. Error: {e}')
 
     return order_counter
 
@@ -465,8 +465,8 @@ def menu_update_orders() -> None:
 
             print(action_message)
 
-    except Exception as error:
-        print(f'Something went wrong: {error}')
+    except Exception as e:
+        print(f'Something went wrong: {e}')
         quit()
 
 
@@ -485,4 +485,3 @@ if __name__ == '__main__':
         case 2:
             menu_update_orders()
             quit()
-

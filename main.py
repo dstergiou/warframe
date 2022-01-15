@@ -440,6 +440,11 @@ def menu_initial_orders(num: int = DEFAULT_ORDERS) -> int:
 
 
 def menu_update_orders() -> None:
+    """
+     Updated existing orders
+
+     """
+
     try:
         orders = get_existing_orders()
 

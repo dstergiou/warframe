@@ -210,11 +210,6 @@ def calculate_new_sell_price(current_prices: list, min_price: int = MIN_PRICE) -
         int: Undercutting price
     """
     
-    # if min(current_prices) -1 < min_price:
-    #     return min_price
-    
-    # return min(current_prices) - 1
-    
     avg = sum(current_prices) / len(current_prices)
     if avg - 1 < min_price:
         return min_price

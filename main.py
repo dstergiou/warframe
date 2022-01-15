@@ -480,7 +480,8 @@ if __name__ == '__main__':
     menu_input = int(input('> '))
     match menu_input:
         case 1:
-            menu_initial_orders()
+            orders_created = menu_initial_orders()
+            print(f'{orders_created} new orders were created')
             quit()
         case 2:
             menu_update_orders()

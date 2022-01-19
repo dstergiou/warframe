@@ -78,7 +78,7 @@ def get_all_prime_items() -> list[str]:
 
     return all_items
 
-def get_items_to_sell() -> OwnedItem:
+def get_prime_items_to_sell() -> OwnedItem:
     """
     Returns the names and quantity of prime parts that we can sell
     These are parts that we have already used / built
@@ -131,7 +131,7 @@ def get_items_to_sell() -> OwnedItem:
 
     return json.dumps(owned_items)
 
-def get_items_to_buy() -> list[str]:
+def get_prime_items_to_buy() -> list[str]:
     """
     Returns a list of missing prime parts
 
@@ -196,5 +196,5 @@ if __name__ == '__main__':
     #     item_id, price = get_info_from_market(key)
     #     print(f'{key},{item_id},{primes[key]},{price}')
     
-    print(get_items_to_sell())
+    print(get_prime_items_to_sell())
     # pass

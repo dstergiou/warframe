@@ -14,7 +14,7 @@ from logging import error
 from time import sleep
 from operator import itemgetter
  
-from db import get_items_to_sell
+from google_sheets import get_prime_items_to_sell
  
 # Config
 
@@ -445,7 +445,7 @@ def menu_initial_orders(num: int = DEFAULT_ORDERS) -> int:
          int: Number of orders created
      """
 
-    items_to_sell = get_items_to_sell()
+    items_to_sell = get_prime_items_to_sell()
     best_deals_to_make = find_most_expensive_items_to_sell(items_to_sell, num=num)
     order_counter = 0
     for deal in best_deals_to_make:

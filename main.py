@@ -6,8 +6,7 @@ import math
 
 from datetime import datetime
 from dataclasses import dataclass
-from typing import List, Union
-from requests.api import get
+from typing import List
 from requests.exceptions import HTTPError
 from dotenv import load_dotenv
 from logging import error

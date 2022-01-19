@@ -55,7 +55,7 @@ headers = {
 
 
 @dataclass
-class ExistingOrder:
+class ExistingPrimeOrder:
     order_id: str
     quantity: int
     platinum: int
@@ -65,13 +65,13 @@ class ExistingOrder:
 
 
 @dataclass
-class NewOrder:
+class NewPrimeOrder:
     item_id: str
     price: int
     quantity: int
     
     
-def get_existing_orders(profile: str = PROFILE_NAME) -> List[ExistingOrder]:
+def get_existing_orders(profile: str = PROFILE_NAME) -> List[ExistingPrimeOrder]:
     """
     Get all selling orders for profile from warframe.market API
 
@@ -79,7 +79,7 @@ def get_existing_orders(profile: str = PROFILE_NAME) -> List[ExistingOrder]:
         profile (str, optional): Profile name on Warframe market. Defaults to PROFILE_NAME.
 
     Returns:
-        List[ExistingOrder]: A list of ExistingOrders
+        List[ExistingPrimeOrder]: A list of ExistingOrders
     """
     
     local_headers = {
@@ -94,7 +94,7 @@ def get_existing_orders(profile: str = PROFILE_NAME) -> List[ExistingOrder]:
         clean_json = data['payload']['sell_orders']
         existing_orders = []
         for line in clean_json:
-            existing_orders.append(ExistingOrder(
+            existing_orders.append(ExistingPrimeOrder(
                 line['id'],
                 line['quantity'],
                 line['platinum'],
@@ -110,13 +110,13 @@ def get_existing_orders(profile: str = PROFILE_NAME) -> List[ExistingOrder]:
         print(f'Error occurred: {err}')
 
 
-def find_lowest_price_for_order(order: ExistingOrder) -> list[int]:
+def find_lowest_price_for_order(order: ExistingPrimeOrder) -> list[int]:
     """
     Scan the warfame.market API for an item and return the lowest price the item
     sells for by a player who is currently "in game".
 
     Args:
-        order (ExistingOrder): An ExistingOrder instance
+        order (ExistingPrimeOrder): An ExistingOrder instance
 
     Returns:
         list[int]: A list of the 5 lowest prices
@@ -241,13 +241,13 @@ def login_to_warframe_market(email: str = EMAIL, password: str = PASSWORD) -> st
         print(f'Error occurred: {err}')
 
 
-def update_existing_order(auth_token: str, order: ExistingOrder, price: int) -> datetime:
+def update_existing_order(auth_token: str, order: ExistingPrimeOrder, price: int) -> datetime:
     """
     Updates an existing warframe.market order
 
     Args:
         auth_token (str): JWT Authentication token
-        order (ExistingOrder): Order to be updated
+        order (ExistingPrimeOrder): Order to be updated
         price (int): Target price
 
     Returns:
@@ -280,13 +280,13 @@ def update_existing_order(auth_token: str, order: ExistingOrder, price: int) -> 
         print(f'Error occurred: {err}')
 
 
-def delete_existing_order(auth_token: str, order: ExistingOrder) -> str:
+def delete_existing_order(auth_token: str, order: ExistingPrimeOrder) -> str:
     """
     Deletes an existing warframe.market order
 
     Args:
         auth_token (str): JWT Authentication token
-        order (ExistingOrder): Order to be updated
+        order (ExistingPrimeOrder): Order to be updated
 
     Returns:
         str: Order ID of the deleted order
@@ -314,12 +314,12 @@ def delete_existing_order(auth_token: str, order: ExistingOrder) -> str:
         print(f'Error occurred: {err}')
 
 
-def calculate_ducats_to_plat_ratio(order: ExistingOrder) -> float:
+def calculate_ducats_to_plat_ratio(order: ExistingPrimeOrder) -> float:
     """
     Calculates the ducats / platinum ratio
 
     Args:
-        order (ExistingOrder): Order for which to calculate the ratio
+        order (ExistingPrimeOrder): Order for which to calculate the ratio
 
     Returns:
         float: Ducats to Platinum ratio
@@ -372,13 +372,13 @@ def get_item_id_from_file(item: str) -> str:
     return "Not found"
 
 
-def create_new_order(auth_token: str, item: NewOrder) -> str:
+def create_new_order(auth_token: str, item: NewPrimeOrder) -> str:
     """
     Sells an item on warframe.market
     
     Args:
         auth_token (str): JWT Token
-        item (NewOrder): An object containing item_id, price and quantity
+        item (NewPrimeOrder): An object containing item_id, price and quantity
     Returns:
         str: Date that the sell order was accepted
     """
@@ -452,7 +452,7 @@ def menu_initial_orders(num: int = DEFAULT_ORDERS) -> int:
         item_id = get_item_id_from_file(deal[0])
         price = deal[1]
         quantity = deal[2]
-        new_order = NewOrder(item_id=item_id, price=price, quantity=quantity)
+        new_order = NewPrimeOrder(item_id=item_id, price=price, quantity=quantity)
         try:
             _ = create_new_order(token, new_order)
             order_counter += 1

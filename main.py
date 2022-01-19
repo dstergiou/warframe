@@ -1,4 +1,3 @@
-
 import requests
 import os
 import json
@@ -23,8 +22,8 @@ from db import get_items_to_sell
 MIN_PRICE = 10 
 
 # Random placeholder price for items we intend to sell for ducats
-DUCAT_PRICE = 421     
-DUCAT_RATIO = 8 
+DUCAT_PRICE = 421
+DUCAT_RATIO = 8
 
 # Default sleep time to not annoy the warframe.market API
 DEFAULT_SLEEP = 0.4
@@ -281,6 +280,40 @@ def update_existing_order(auth_token: str, order: ExistingOrder, price: int) -> 
         print(f'Error occurred: {err}')
 
 
+def delete_existing_order(auth_token: str, order: ExistingOrder) -> str:
+    """
+    Deletes an existing warframe.market order
+
+    Args:
+        auth_token (str): JWT Authentication token
+        order (ExistingOrder): Order to be updated
+
+    Returns:
+        str: Order ID of the deleted order
+    """
+
+    order_id = order.order_id
+    authorization_header = {
+        'Authorization': auth_token,
+    }
+
+    update_headers = headers | authorization_header
+
+    try:
+        sleep(DEFAULT_SLEEP)
+        response = requests.delete(f'{URL}/profile/orders/{order_id}', headers=update_headers)
+        response.raise_for_status()
+        response_data = response.json()
+        deleted_order = response_data['payload']['order_id']
+
+        return deleted_order
+
+    except HTTPError as http_err:
+        print(f'HTTP Error occurred: {http_err}')
+    except Exception as err:
+        print(f'Error occurred: {err}')
+
+
 def calculate_ducats_to_plat_ratio(order: ExistingOrder) -> float:
     """
     Calculates the ducats / platinum ratio
@@ -402,11 +435,6 @@ def find_most_expensive_items_to_sell(file: str, num: int = DEFAULT_ORDERS) -> l
     return sorted(deals_to_make, key=itemgetter(1), reverse=True)[:num]
 
 
-def menu_menu() -> None:
-    print(f'1. Create initial orders')
-    print(f'2. Update existing orders')
-
-
 def menu_initial_orders(num: int = DEFAULT_ORDERS) -> int:
     """
      Create the initial orders to be posted
@@ -437,7 +465,6 @@ def menu_initial_orders(num: int = DEFAULT_ORDERS) -> int:
 def menu_update_orders() -> None:
     """
      Updated existing orders
-
      """
 
     try:
@@ -470,19 +497,26 @@ def menu_update_orders() -> None:
         quit()
 
 
+def menu_delete_orders() -> None:
+    """
+    Deletes all orders
+    """
+    orders = get_existing_orders()
+    if len(orders):
+        for order in orders:
+            print(f'Deleting order {order.order_id}')
+            _ = delete_existing_order(token, order)
+    else:
+        print('No orders to delete - skipping')
+
+
 if __name__ == '__main__':
     try:
         token = login_to_warframe_market()
+        menu_delete_orders()
+        orders_created = menu_initial_orders()
+        print(f'{orders_created} new orders were created')
+        quit()
+
     except Exception as error:
         print(f'Login failed with error: {error}')
-
-    menu_menu()
-    menu_input = int(input('> '))
-    match menu_input:
-        case 1:
-            orders_created = menu_initial_orders()
-            print(f'{orders_created} new orders were created')
-            quit()
-        case 2:
-            menu_update_orders()
-            quit()

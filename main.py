@@ -363,7 +363,7 @@ def get_item_id_from_file(item: str) -> str:
         str: Item ID as defined on warframe.market (e.g. 5a2feeb1c2c9e90cbdaa23d2)
     """
     
-    with open('items.db', 'r', newline='') as f:
+    with open('prime_items.db', 'r', newline='') as f:
         csv_reader = csv.reader(f, delimiter=',')
         for row in csv_reader:
             if item == row[0]:

@@ -21,7 +21,7 @@ from google_sheets import get_prime_items_to_sell
 MIN_PRICE = 10 
 
 # Random placeholder price for items we intend to sell for ducats
-DUCAT_PRICE = 421
+DUCAT_PRICE = 9999
 DUCAT_RATIO = 8
 
 # Default sleep time to not annoy the warframe.market API

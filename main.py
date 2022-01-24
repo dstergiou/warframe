@@ -38,9 +38,11 @@ print(f'Preparing to find new orders - Prime items')
 prime_items: OwnedItem = get_prime_items_to_sell()
 combined_items: OwnedItem = standard_items | prime_items
 
+# Find the best (most expensive) items we can sell
 print(f'Querying warframe.market for current prices')
 best_deals = find_most_expensive_items_to_sell(PROFILE_NAME, combined_items, 20)
 
+# Loop through the items, find their IDs and place the orders for the quantity we hold
 for deal in best_deals:
     item_id = get_item_id_from_file(deal[0])
     if item_id == "Not found":

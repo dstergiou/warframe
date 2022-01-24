@@ -1,4 +1,3 @@
-import json
 import gspread
 from typing import TypedDict
 
@@ -13,6 +12,8 @@ PRIME_WORKSHEET = 'Prime'
 PRIME_RANGE = 'A2:R109'
 ITEM_WORKSHEET = 'Items'
 ITEM_RANGE = 'A1:B10'
+MODS_WORKSHEET = 'Mods'
+MODS_RANGE = 'A1:B10'
 KEY = 'sheets.json'
 
 
@@ -134,7 +135,6 @@ def get_prime_items_to_sell() -> OwnedItem:
             item_name = f'{base_name}_prime_{fourth_component.replace(" ", "_")}'.lower()
             owned_items[item_name] = fourth_component_quantity
 
-    # return json.dumps(owned_items)
     return owned_items
 
 
@@ -210,9 +210,28 @@ def get_items_to_sell() -> OwnedItem:
         if len(base_name) and quantity > 0:
             owned_items[base_name] = quantity
 
-    # return json.dumps(owned_items)
+    return owned_items
+
+
+def get_mods_to_sell() -> OwnedItem:
+    """
+    Returns the names and quantity of mods that we can sell
+
+    Returns:
+        str: Item and quantity (e.g 'flow': 4)
+    """
+    records = read_data_from_sheet(sheet=SHEET, worksheet=MODS_WORKSHEET, cell_range=MODS_RANGE)
+    owned_items = {}
+
+    for row in records:
+        base_name = row[0]
+        quantity = int(row[1])
+
+        if len(base_name) and quantity > 0:
+            owned_items[base_name] = quantity
+
     return owned_items
 
 
 if __name__ == '__main__':
-    print(get_prime_items_to_sell())
+    pass

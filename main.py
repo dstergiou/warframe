@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from database.google_sheets import OwnedItem
-from database.google_sheets import get_prime_items_to_sell, get_items_to_sell
+from database.google_sheets import get_prime_items_to_sell, get_items_to_sell, get_mods_to_sell
 from database.local import get_item_id_from_file
 from database.query import find_most_expensive_items_to_sell
 
@@ -36,7 +36,9 @@ print(f'Preparing to find new orders - Standard items')
 standard_items: OwnedItem = get_items_to_sell()
 print(f'Preparing to find new orders - Prime items')
 prime_items: OwnedItem = get_prime_items_to_sell()
-combined_items: OwnedItem = standard_items | prime_items
+print(f'Preparing to find new orders - Mods')
+mods: OwnedItem = get_mods_to_sell()
+combined_items: OwnedItem = standard_items | prime_items | mods
 
 # Find the best (most expensive) items we can sell
 print(f'Querying warframe.market for current prices')

@@ -1,25 +1,29 @@
 import json
 import gspread
-from sqlite3  import Error
 from typing import TypedDict
+
 
 class OwnedItem(TypedDict):
     item_name: str
     quantity: int
 
+
 SHEET = 'Warframe'
 PRIME_WORKSHEET = 'Prime' 
 PRIME_RANGE = 'A2:R109'
+ITEM_WORKSHEET = 'Items'
+ITEM_RANGE = 'A1:B10'
 KEY = 'sheets.json'
 
-def read_data_from_sheet(sheet:str=SHEET, worksheet:str=PRIME_WORKSHEET, range:str=PRIME_RANGE) -> list[list[str]]:
+
+def read_data_from_sheet(sheet: str = SHEET, worksheet: str = PRIME_WORKSHEET, cell_range: str = PRIME_RANGE) -> list[list[str]]:
     """
     Reads the Google Sheet that contains the information on prime items
 
     Args:
         sheet (str): Google Sheet name
         worksheet (str): Worksheet in the Google Sheet
-        range (str): Range containing the values
+        cell_range (str): Range containing the values
 
     Returns:
         list[list[str]]: [description]
@@ -27,8 +31,9 @@ def read_data_from_sheet(sheet:str=SHEET, worksheet:str=PRIME_WORKSHEET, range:s
     sa = gspread.service_account(filename=KEY)
     sheet = sa.open(sheet)
     worksheet = sheet.worksheet(worksheet)
-    records = worksheet.get(range)
+    records = worksheet.get(cell_range)
     return records
+
 
 def get_all_prime_items() -> list[str]:
     """
@@ -37,7 +42,7 @@ def get_all_prime_items() -> list[str]:
     Returns:
         [list[str]]: List containing prime part names (e.g guandao_prime_blueprint)
     """
-    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, range=PRIME_RANGE)
+    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, cell_range=PRIME_RANGE)
     all_items = []
         
     for row in records:      
@@ -77,15 +82,16 @@ def get_all_prime_items() -> list[str]:
 
     return all_items
 
+
 def get_prime_items_to_sell() -> OwnedItem:
     """
     Returns the names and quantity of prime parts that we can sell
     These are parts that we have already used / built
     
     Returns:
-        OwnedItem: Item and and quantity (e.g 'zakti_prime_barrel': 4)
+        OwnedItem: Item and quantity (e.g 'zakti_prime_barrel': 4)
     """
-    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, range=PRIME_RANGE)
+    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, cell_range=PRIME_RANGE)
     owned_items = {} 
         
     for row in records:
@@ -130,6 +136,7 @@ def get_prime_items_to_sell() -> OwnedItem:
 
     return json.dumps(owned_items)
 
+
 def get_prime_items_to_buy() -> list[str]:
     """
     Returns a list of missing prime parts
@@ -137,7 +144,7 @@ def get_prime_items_to_buy() -> list[str]:
     Returns:
         list[str]: List of missing prime parts (e.g. 'mag_prime_systems')
     """
-    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, range=PRIME_RANGE)
+    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, cell_range=PRIME_RANGE)
     needed_items = []
     
     for row in records:
@@ -155,34 +162,55 @@ def get_prime_items_to_buy() -> list[str]:
         third_component_quantity = int(row[11]) if len(row[11]) else -1
         fourth_component = row[13]
         fourth_component_quantity = int(row[14]) if len(row[14]) else 0
-        
-    
+
     # Blueprint
         if len(blueprint) and blueprint_quantity == 0:
             item_name = f'{base_name}_prime_{blueprint.replace(" ", "_")}'.lower()
             needed_items.append(item_name)
         
-        # First component
+    # First component
         if len(first_component) and first_component_quantity == 0:
             item_name = f'{base_name}_prime_{first_component.replace(" ", "_")}'.lower()
             needed_items.append(item_name)
             
-        # Second component
+    # Second component
         if len(second_component) and second_component_quantity == 0:
             item_name = f'{base_name}_prime_{second_component.replace(" ", "_")}'.lower()
             needed_items.append(item_name)
             
-        # Third component
+    # Third component
         if len(third_component) and third_component_quantity == 0:
             item_name = f'{base_name}_prime_{third_component.replace(" ", "_")}'.lower()
             needed_items.append(item_name)
 
-        # Fourth component
+    # Fourth component
         if len(fourth_component) and fourth_component_quantity == 0:
             item_name = f'{base_name}_prime_{fourth_component.replace(" ", "_")}'.lower()
             needed_items.append(item_name)
 
     return needed_items
-    
-if __name__ == '__main__':    
-    print(get_prime_items_to_sell())
+
+
+def get_items_to_sell() -> str:
+    """
+    Returns the names and quantity of items that we can sell
+    These are parts that we have already used / built
+
+    Returns:
+        str: Item and quantity (e.g 'epitaph set': 4)
+    """
+    records = read_data_from_sheet(sheet=SHEET, worksheet=ITEM_WORKSHEET, cell_range=ITEM_RANGE)
+    owned_items = {}
+
+    for row in records:
+        base_name = row[0]
+        quantity = int(row[1])
+
+        if len(base_name) and quantity > 0:
+            owned_items[base_name] = quantity
+
+    return json.dumps(owned_items)
+
+
+if __name__ == '__main__':
+    print(get_items_to_sell())

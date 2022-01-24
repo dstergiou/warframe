@@ -1,5 +1,4 @@
 import os
-import json
 
 from dotenv import load_dotenv
 
@@ -36,8 +35,7 @@ else:
 print(f'Preparing to find new orders - Standard items')
 standard_items: OwnedItem = get_items_to_sell()
 print(f'Preparing to find new orders - Prime items')
-# prime_items: OwnedItem = get_prime_items_to_sell()
-prime_items = {}
+prime_items: OwnedItem = get_prime_items_to_sell()
 combined_items: OwnedItem = standard_items | prime_items
 
 print(f'Querying warframe.market for current prices')

@@ -7,13 +7,12 @@ class OwnedItem(TypedDict):
     item_name: str
     quantity: int
 
-DB_FILE = 'warframe.db'   
 SHEET = 'Warframe'
-WORKSHEET = 'Prime' 
-RANGE = 'A2:R109'
+PRIME_WORKSHEET = 'Prime' 
+PRIME_RANGE = 'A2:R109'
 KEY = 'sheets.json'
 
-def read_data_from_sheet(sheet:str=SHEET, worksheet:str=WORKSHEET, range:str=RANGE) -> list[list[str]]:
+def read_data_from_sheet(sheet:str=SHEET, worksheet:str=PRIME_WORKSHEET, range:str=PRIME_RANGE) -> list[list[str]]:
     """
     Reads the Google Sheet that contains the information on prime items
 
@@ -38,7 +37,7 @@ def get_all_prime_items() -> list[str]:
     Returns:
         [list[str]]: List containing prime part names (e.g guandao_prime_blueprint)
     """
-    records = read_data_from_sheet(sheet=SHEET, worksheet=WORKSHEET, range=RANGE)
+    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, range=PRIME_RANGE)
     all_items = []
         
     for row in records:      
@@ -86,7 +85,7 @@ def get_prime_items_to_sell() -> OwnedItem:
     Returns:
         OwnedItem: Item and and quantity (e.g 'zakti_prime_barrel': 4)
     """
-    records = read_data_from_sheet(sheet=SHEET, worksheet=WORKSHEET, range=RANGE)
+    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, range=PRIME_RANGE)
     owned_items = {} 
         
     for row in records:
@@ -138,7 +137,7 @@ def get_prime_items_to_buy() -> list[str]:
     Returns:
         list[str]: List of missing prime parts (e.g. 'mag_prime_systems')
     """
-    records = read_data_from_sheet(sheet=SHEET, worksheet=WORKSHEET, range=RANGE)
+    records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, range=PRIME_RANGE)
     needed_items = []
     
     for row in records:

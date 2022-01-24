@@ -18,7 +18,7 @@ from google_sheets import get_prime_items_to_sell
 # Config
 
 # We won't list or sell anything under this much platinum
-MIN_PRICE = 10 
+MIN_PRICE = 10
 
 # Random placeholder price for items we intend to sell for ducats
 DUCAT_PRICE = 9999

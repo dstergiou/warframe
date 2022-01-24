@@ -89,7 +89,7 @@ def get_prime_items_to_sell() -> OwnedItem:
     These are parts that we have already used / built
     
     Returns:
-        OwnedItem: Item and quantity (e.g 'zakti_prime_barrel': 4)
+        str: Item and quantity (e.g 'zakti_prime_barrel': 4)
     """
     records = read_data_from_sheet(sheet=SHEET, worksheet=PRIME_WORKSHEET, cell_range=PRIME_RANGE)
     owned_items = {} 
@@ -134,7 +134,8 @@ def get_prime_items_to_sell() -> OwnedItem:
             item_name = f'{base_name}_prime_{fourth_component.replace(" ", "_")}'.lower()
             owned_items[item_name] = fourth_component_quantity
 
-    return json.dumps(owned_items)
+    # return json.dumps(owned_items)
+    return owned_items
 
 
 def get_prime_items_to_buy() -> list[str]:
@@ -191,7 +192,7 @@ def get_prime_items_to_buy() -> list[str]:
     return needed_items
 
 
-def get_items_to_sell() -> str:
+def get_items_to_sell() -> OwnedItem:
     """
     Returns the names and quantity of items that we can sell
     These are parts that we have already used / built
@@ -209,8 +210,9 @@ def get_items_to_sell() -> str:
         if len(base_name) and quantity > 0:
             owned_items[base_name] = quantity
 
-    return json.dumps(owned_items)
+    # return json.dumps(owned_items)
+    return owned_items
 
 
 if __name__ == '__main__':
-    print(get_items_to_sell())
+    print(get_prime_items_to_sell())

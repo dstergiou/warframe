@@ -184,16 +184,5 @@ def get_prime_items_to_buy() -> list[str]:
 
     return needed_items
     
-if __name__ == '__main__':
-    # print(read_data_from_sheet())
-    # db = create_db_connection()
-    # create_db_table(db)
-    # print(sheet_to_db(db))
-    # print(get_items_to_buy())
-    # primes = get_items_to_sell()
-    # for key in primes:
-    #     item_id, price = get_info_from_market(key)
-    #     print(f'{key},{item_id},{primes[key]},{price}')
-    
+if __name__ == '__main__':    
     print(get_prime_items_to_sell())
-    # pass

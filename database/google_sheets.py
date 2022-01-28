@@ -14,7 +14,7 @@ ITEM_WORKSHEET = 'Items'
 ITEM_RANGE = 'A1:B10'
 MODS_WORKSHEET = 'Mods'
 MODS_RANGE = 'A1:B10'
-KEY = 'sheets.json'
+KEY = './sheets.json'
 
 
 def read_data_from_sheet(sheet: str = SHEET, worksheet: str = PRIME_WORKSHEET, cell_range: str = PRIME_RANGE) -> list[list[str]]:

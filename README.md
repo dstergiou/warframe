@@ -16,4 +16,11 @@ The `.env` file needs the following information:
 
 - `EMAIL`: Email used to login to warframe.market
 - `PASSWORD`: Password used to login to warframe.market
-- `PROFILE_NAME`: In-game profile name (named used on warframe.market) 
+- `PROFILE_NAME`: In-game profile name (named used on warframe.market)
+
+# TODO
+
+- Use OCR to automate inventory management
+- Add support for Riven Mods
+- Update prices instead of recreating auctions
+- Consider ducat value before listing an item

@@ -197,6 +197,10 @@ def create_new_order(auth_token: str, item: NewPrimeOrder) -> str:
         'platinum': item.price,
         'quantity': item.quantity,
     }
+    
+    mod_data = {
+        'mod_rank' : 0,
+    }
 
     try:
         sleep(DEFAULT_SLEEP)

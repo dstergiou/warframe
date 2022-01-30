@@ -11,10 +11,10 @@ SHEET = 'Warframe'
 PRIME_WORKSHEET = 'Prime' 
 PRIME_RANGE = 'A2:R109'
 ITEM_WORKSHEET = 'Items'
-ITEM_RANGE = 'A1:B10'
+ITEM_RANGE = 'A1:B100'
 MODS_WORKSHEET = 'Mods'
-MODS_RANGE = 'A1:B10'
-KEY = './sheets.json'
+MODS_RANGE = 'A1:B100'
+KEY = 'database/sheets.json'
 
 
 def read_data_from_sheet(sheet: str = SHEET, worksheet: str = PRIME_WORKSHEET, cell_range: str = PRIME_RANGE) -> list[list[str]]:

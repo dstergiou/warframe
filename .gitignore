@@ -3,3 +3,5 @@ venv/
 __pycache__/
 sheets.json
 .idea/
+web/node_modules/
+web/static/.webassets-cache

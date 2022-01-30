@@ -36,8 +36,12 @@ print(f'Preparing to find new orders - Standard items')
 standard_items: OwnedItem = get_items_to_sell()
 print(f'Preparing to find new orders - Prime items')
 prime_items: OwnedItem = get_prime_items_to_sell()
-print(f'Preparing to find new orders - Mods')
-mods: OwnedItem = get_mods_to_sell()
+
+# TODO: Mods need also a mod_rank, need to remake selling function
+# print(f'Preparing to find new orders - Mods')
+# mods: OwnedItem = get_mods_to_sell()
+mods = {}
+
 combined_items: OwnedItem = standard_items | prime_items | mods
 
 # Find the best (most expensive) items we can sell
